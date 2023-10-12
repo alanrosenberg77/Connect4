@@ -57,9 +57,34 @@ public class ConnectBoard implements GameBoard {
 	@Override
 	public int connected() {
 		
+		//looping through all spaces
+		for(int i = 0 ; i < board.length ; i++) {
+			for(int j = 0 ; j < board[0].length ; j++) {
+				
+				//if nw diagonal is connected, return winning player
+				int nw = checkNW(i, j);
+				if(nw != 0)
+					return nw;
+				
+				//if column is connected, return winning player
+				int n = checkN(i, j);
+				if(n != 0)
+					return n;
+				
+				//if ne diagonal is connected, return winning player
+				int ne = checkNE(i, j);
+				if(ne != 0)
+					return ne;
+				
+				//if row is connected, return winning player
+				int e = checkE(i, j);
+				if(e != 0)
+					return e;
+			}
+		}
 		
-		
-		return 0;
+		//if not connected at all, returning no winner
+		return NONE;
 	}
 	
 	/**
@@ -67,7 +92,7 @@ public class ConnectBoard implements GameBoard {
 	 * for <i>N</i> connected disks. If found, returns the winning player.
 	 * @return id of winning player, 0 if no winner
 	 */
-	private int checkNorth(int row, int col) {
+	private int checkN(int row, int col) {
 		
 		//grabbing which player to check for
 		int player = board[col][row];
@@ -76,10 +101,10 @@ public class ConnectBoard implements GameBoard {
 		int streak = 0;
 		
 		//looping up the column
-		for(int i = row ; i < board[col].length ; i++) {
+		for(int i = 0 ; i < N ; i++) {
 			
 			//checking space for matching disk
-			if(board[col][i] == player) {
+			if(board[col][row+i] == player) {
 				
 				//incrementing streak
 				streak++;
@@ -95,7 +120,114 @@ public class ConnectBoard implements GameBoard {
 		}
 		
 		//if long enough streak not found, returning no winner
-		return 0;
+		return NONE;
+	}
+	
+	/**
+	 * Helper method for connected. Checks east (right) from a certain disk
+	 * for <i>N</i> connected disks. If found, returns the winning player.
+	 * @return id of winning player, 0 if no winner
+	 */
+	private int checkE(int row, int col) {
+		
+		//grabbing which player to check for
+		int player = board[col][row];
+		
+		//tracking how many connected disks there are
+		int streak = 0;
+		
+		//looping across the row
+		for(int i = 0 ; i < N ; i++) {
+			
+			//checking space for matching disk
+			if(board[col+i][row] == player) {
+				
+				//incrementing streak
+				streak++;
+				
+				//if streak meets requirement...
+				if(streak == N) {
+					
+					//returning winning player
+					return player;
+				}
+			}
+		}
+		
+		//if long enough streak not found, returning no winner
+		return NONE;
+	}
+	
+	/**
+	 * Helper method for connected. Checks northeast (diagonal right) from a
+	 * certain disk for <i>N</i> connected disks. If found, returns the winning
+	 * player.
+	 * @return id of winning player, 0 if no winner
+	 */
+	private int checkNE(int row, int col) {
+		
+		//grabbing which player to check for
+		int player = board[col][row];
+		
+		//tracking how many connected disks there are
+		int streak = 0;
+		
+		//looping across the row
+		for(int i = 0 ; i < N ; i++) {
+			
+			//checking space for matching disk
+			if(board[col+i][row+i] == player) {
+				
+				//incrementing streak
+				streak++;
+				
+				//if streak meets requirement...
+				if(streak == N) {
+					
+					//returning winning player
+					return player;
+				}
+			}
+		}
+		
+		//if long enough streak not found, returning no winner
+		return NONE;
+	}
+	
+	/**
+	 * Helper method for connected. Checks northwest (diagonal left) from a
+	 * certain disk for <i>N</i> connected disks. If found, returns the winning
+	 * player.
+	 * @return id of winning player, 0 if no winner
+	 */
+	private int checkNW(int row, int col) {
+		
+		//grabbing which player to check for
+		int player = board[col][row];
+		
+		//tracking how many connected disks there are
+		int streak = 0;
+		
+		//looping across the row
+		for(int i = 0 ; i < N ; i++) {
+			
+			//checking space for matching disk
+			if(board[col-i][row+i] == player) {
+				
+				//incrementing streak
+				streak++;
+				
+				//if streak meets requirement...
+				if(streak == N) {
+					
+					//returning winning player
+					return player;
+				}
+			}
+		}
+		
+		//if long enough streak not found, returning no winner
+		return NONE;
 	}
 
 	@Override
