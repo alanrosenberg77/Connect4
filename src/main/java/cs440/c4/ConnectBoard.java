@@ -52,8 +52,6 @@ public class ConnectBoard implements GameBoard {
 		//returning -1 if column is full
 		return -1;
 		
-		//TODO ensure this is right
-		
 	}
 
 	@Override
@@ -64,8 +62,21 @@ public class ConnectBoard implements GameBoard {
 
 	@Override
 	public boolean gameOver() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		//calling connected to return which player has won
+		int player = connected();
+		
+		//as long as connected returns 1 or -1 (not 0)...
+		if(player != 0)
+			
+			//game over
+			return true;
+		
+		//otherwise...
+		else
+			
+			//not game over
+			return false;
 	}
 
 	@Override
