@@ -20,7 +20,7 @@ public class ConnectBoard implements GameBoard {
 	 * Convenient constructor for parameterized ConnectBoard
 	 */
 	public ConnectBoard(int row, int col) {
-		board = new int[row][col];
+		board = new int[col][row];
 	}
 	
 	/*
@@ -56,7 +56,45 @@ public class ConnectBoard implements GameBoard {
 
 	@Override
 	public int connected() {
-		// TODO Auto-generated method stub
+		
+		
+		
+		return 0;
+	}
+	
+	/**
+	 * Helper method for connected. Checks north (up) from a certain disk
+	 * for <i>N</i> connected disks. If found, returns the winning player.
+	 * @return id of winning player, 0 if no winner
+	 */
+	private int checkNorth(int row, int col) {
+		
+		//grabbing which player to check for
+		int player = board[col][row];
+		
+		//tracking how many connected disks there are
+		int streak = 0;
+		
+		//looping up the column
+		for(int i = row ; i < board[col].length ; i++) {
+			
+			//checking space for matching disk
+			if(board[col][i] == player) {
+				
+				//incrementing streak
+				streak++;
+				
+				//if streak meets requirement...
+				if(streak == N) {
+					
+					//returning winning player
+					return player;
+					
+				}
+			}
+		}
+		
+		//if long enough streak not found, returning no winner
 		return 0;
 	}
 
