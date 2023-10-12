@@ -32,8 +32,28 @@ public class ConnectBoard implements GameBoard {
 
 	@Override
 	public int addDisk(int c, int player) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		int[] col = board[c];	//retrieving specified column
+		
+		//looping through column...
+		for(int i = 0 ; i < col.length ; i++) {
+			
+			//until we find an available space
+			if(col[i] == AVAIL) {
+				
+				//putting a disk there based on whose turn it is
+				col[i] = player;
+				
+				//returning index of column where disk was dropped
+				return i;
+			}
+		}
+		
+		//returning -1 if column is full
+		return -1;
+		
+		//TODO ensure this is right
+		
 	}
 
 	@Override
