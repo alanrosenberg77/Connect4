@@ -100,27 +100,38 @@ public class ConnectBoard implements GameBoard {
 		//tracking how many connected disks there are
 		int streak = 0;
 		
-		//looping up the column
-		for(int i = 0 ; i < N ; i++) {
+		try {
 			
-			//checking space for matching disk
-			if(board[col][row+i] == player) {
+			//looping up the column
+			for(int i = 0 ; i < N ; i++) {
 				
-				//incrementing streak
-				streak++;
-				
-				//if streak meets requirement...
-				if(streak == N) {
+				//checking space for matching disk
+				if(board[col][row+i] == player) {
 					
-					//returning winning player
-					return player;
+					//incrementing streak
+					streak++;
 					
+					//if streak meets requirement...
+					if(streak == N) {
+						
+						//returning winning player
+						return player;
+						
+					}
 				}
 			}
+			
+			//if long enough streak not found, returning no winner
+			return NONE;
+			
 		}
 		
-		//if long enough streak not found, returning no winner
-		return NONE;
+		//if search goes out of bounds, no winner
+		catch(IndexOutOfBoundsException e) {
+			
+			return NONE;
+			
+		}
 	}
 	
 	/**
@@ -136,26 +147,37 @@ public class ConnectBoard implements GameBoard {
 		//tracking how many connected disks there are
 		int streak = 0;
 		
-		//looping across the row
-		for(int i = 0 ; i < N ; i++) {
+		try {
 			
-			//checking space for matching disk
-			if(board[col+i][row] == player) {
+			//looping across the row
+			for(int i = 0 ; i < N ; i++) {
 				
-				//incrementing streak
-				streak++;
-				
-				//if streak meets requirement...
-				if(streak == N) {
+				//checking space for matching disk
+				if(board[col+i][row] == player) {
 					
-					//returning winning player
-					return player;
+					//incrementing streak
+					streak++;
+					
+					//if streak meets requirement...
+					if(streak == N) {
+						
+						//returning winning player
+						return player;
+					}
 				}
 			}
+			
+			//if long enough streak not found, returning no winner
+			return NONE;
+			
 		}
 		
-		//if long enough streak not found, returning no winner
-		return NONE;
+		//if search goes out of bounds, no winner
+		catch(IndexOutOfBoundsException e) {
+			
+			return NONE;
+			
+		}
 	}
 	
 	/**
@@ -172,26 +194,39 @@ public class ConnectBoard implements GameBoard {
 		//tracking how many connected disks there are
 		int streak = 0;
 		
-		//looping across the row
-		for(int i = 0 ; i < N ; i++) {
+		try {
 			
-			//checking space for matching disk
-			if(board[col+i][row+i] == player) {
+			//looping across the row
+			for(int i = 0 ; i < N ; i++) {
 				
-				//incrementing streak
-				streak++;
-				
-				//if streak meets requirement...
-				if(streak == N) {
+				//checking space for matching disk
+				if(board[col+i][row+i] == player) {
 					
-					//returning winning player
-					return player;
+					//incrementing streak
+					streak++;
+					
+					//if streak meets requirement...
+					if(streak == N) {
+						
+						//returning winning player
+						return player;
+					}
 				}
 			}
+			
+			//if long enough streak not found, returning no winner
+			return NONE;
+			
 		}
 		
-		//if long enough streak not found, returning no winner
-		return NONE;
+		//if search goes out of bounds, no winner
+		catch(IndexOutOfBoundsException e) {
+			
+			return NONE;
+			
+		}
+		
+		
 	}
 	
 	/**
@@ -208,26 +243,39 @@ public class ConnectBoard implements GameBoard {
 		//tracking how many connected disks there are
 		int streak = 0;
 		
-		//looping across the row
-		for(int i = 0 ; i < N ; i++) {
+		try {
 			
-			//checking space for matching disk
-			if(board[col-i][row+i] == player) {
+			//looping across the row
+			for(int i = 0 ; i < N ; i++) {
 				
-				//incrementing streak
-				streak++;
-				
-				//if streak meets requirement...
-				if(streak == N) {
+				//checking space for matching disk
+				if(board[col-i][row+i] == player) {
 					
-					//returning winning player
-					return player;
+					//incrementing streak
+					streak++;
+					
+					//if streak meets requirement...
+					if(streak == N) {
+						
+						//returning winning player
+						return player;
+					}
 				}
 			}
+			
+			//if long enough streak not found, returning no winner
+			return NONE;
+			
 		}
 		
-		//if long enough streak not found, returning no winner
-		return NONE;
+		//if search goes out of bounds, no winner
+		catch(IndexOutOfBoundsException e) {
+			
+			return NONE;
+			
+		}
+		
+		
 	}
 
 	@Override

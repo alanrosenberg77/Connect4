@@ -21,7 +21,7 @@ class ConnectBoardTests {
 			{-1,1,1,-1,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0,0,0},
 			{1,-1,0,0,0,0,0,0,0,0},
-			{-1,1,1,1,1,0,0,0,0,0}};
+			{-1,1,1,1,0,0,0,0,0,0}};
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -102,5 +102,30 @@ class ConnectBoardTests {
 			
 		}
 	}
+	
+	/*
+	 * Testing connected
+	 */
 
+	/*
+	 * Testing that connected works properly with board with winning string of disks
+	 */
+	@Test
+	void test_connected_Normal() {
+		
+		int winner = sampleBoard.connected();
+		
+		assertEquals(sampleBoard.AGENT, winner);
+	}
+	
+	/*
+	 * Testing that connected works properly with blank board (no winner)
+	 */
+	@Test
+	void test_connected_NoWinner() {
+		
+		int winner = blankBoard.connected();
+		
+		assertEquals(blankBoard.NONE, winner);
+	}
 }
