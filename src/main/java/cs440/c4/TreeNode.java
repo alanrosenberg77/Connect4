@@ -1,5 +1,6 @@
 package cs440.c4;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,6 +34,8 @@ public class TreeNode implements Comparable<TreeNode> {
 		
 		alpha = Integer.MIN_VALUE;
 		beta = Integer.MIN_VALUE;
+		
+		children = new LinkedList<>();
 		
 		if(state.gameOver()) {
 			calcPoints();
