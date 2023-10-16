@@ -1,25 +1,26 @@
 package cs440.c4;
 
 /**
- * An instance of this class is capable of performing a Minimax Search. When given
- * a state of a Connect 4 game, it will reinitialize and be ready to perform the search.
+ * An instance of this class is capable of performing a Minimax Search with
+ * alpha-beta pruning. When given a state of a Connect 4 game, AlphaBetaAgent
+ * objects will reinitialize and be ready to perform the search.
  * @author alanr
  *
  */
-public class MinimaxAgent implements Agent {
-
+public class AlphaBetaAgent implements Agent {
+	
 	ConnectBoard board;
-
+	
 	/*
 	 * Convenient parameterized constructor
 	 */
-	public MinimaxAgent(GameBoard board) {
+	public AlphaBetaAgent(GameBoard board) {
 		this.board = (ConnectBoard) board;
 	}
 
 	@Override
 	public void initializeWithBoard(GameBoard board) throws Exception {
-
+		
 		this.board = (ConnectBoard) board;
 	}
 
@@ -27,39 +28,42 @@ public class MinimaxAgent implements Agent {
 	public int nextAction() throws Exception {
 		
 		System.err.println("deciding");
-		return minimaxSearch();
+		return alphaBetaSearch();
 	}
-
+	
 	/**
-	 * Implementation of the Minimax algorithm. Calls on min method because the
-	 * agent will always attempt to minimize score.
+	 * Implementation of the Minimax algorithm with alpha-beta pruning. Calls on
+	 * min method to start because agent will always attempt to minimize score.
 	 * @return
 	 */
-	private int minimaxSearch() {
+	private int alphaBetaSearch() {
 		
-		System.err.println("minimaxing");
-
+		System.err.println("alhpaing and betaing");
+		
 		//calling min to find minimum option and returning it
-		SearchTuple solution = minVal(board.copy(), 0);
+		SearchTuple solution = minVal(board.copy(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
 		return solution.getAction();
-
 	}
-
+	
 	/**
-	 * Max from the minimax algorithm. Chooses the maximum from the child sates.
+	 * Max from the minimax algorithm with alpha-beta pruning. Chooses the maximum value
+	 * from the child states. Limiting depth of search tree to 7
+	 * 
 	 * @param current state
-	 * @param depth
+	 * @param alpha
+	 * @param beta
+	 * @param depth of search tree
 	 * @return maximum utility of child states
 	 */
-	private SearchTuple maxVal(ConnectBoard current, int depth) {
+	private SearchTuple maxVal(ConnectBoard current, int alpha, int beta, int depth) {
 		
 		System.err.println("maxing");
 		
-		//exiting early if in terminal state, returning only utility
+		//exiting early if in terminal state or too deep, returning only utility
 		if(current.gameOver() || depth >= 7)
 			return new SearchTuple(current.calcPoints(), null);
 		
-		//setting current best utikity to negative infinity
+		//setting current best utility to negative infinity
 		SearchTuple best = new SearchTuple(Integer.MIN_VALUE, null);
 		
 		//for every possible action...
@@ -72,8 +76,8 @@ public class MinimaxAgent implements Agent {
 				ConnectBoard newBoard = current.copy();
 				newBoard.addDisk(i, 1);
 				
-				//ask min what she thinks about it
-				SearchTuple result = minVal(newBoard, depth+1);
+				//and ask min what she thinks of it
+				SearchTuple result = minVal(newBoard, alpha, beta, depth+1);
 				
 				//if min gave back something better than what max has...
 				if(result.getScore() > best.getScore()) {
@@ -81,26 +85,36 @@ public class MinimaxAgent implements Agent {
 					//store it and its action
 					best.setScore(result.getScore());
 					best.setAction(i);
+					
+					//update alpha if necessary
+					alpha = Integer.max(alpha, best.getScore());
+				}
+				
+				//if best score exceeds beta, then return best score
+				if(best.getScore() >= beta) {
+					return best;
 				}
 			}
 			
 		}
 		
 		return best;
-
 	}
-
+	
 	/**
-	 * Min from the minimax algorithm. Chooses the minimum from tghe child states.
+	 * Min from the minimax algorithm with alpha-beta pruning. Chooses the minimum value
+	 * from the child states. Limiting depth of search tree to 7
+	 * 
 	 * @param current state
-	 * @param depth
+	 * @param alpha
+	 * @param beta
 	 * @return minimum utility of child states
 	 */
-	private SearchTuple minVal(ConnectBoard current, int depth) {
+	private SearchTuple minVal(ConnectBoard current, int alpha, int beta, int depth) {
 		
 		System.err.println("mining");
 
-		//exitinig early if in terminal state, returning only utility
+		//exiting early if in terminal state or too deep, returning only utility
 		if(current.gameOver() || depth >= 7)
 			return new SearchTuple(current.calcPoints(), null);
 		
@@ -118,14 +132,20 @@ public class MinimaxAgent implements Agent {
 				newBoard.addDisk(i, -1);
 				
 				//and ask max what he thinks of it
-				SearchTuple result = maxVal(newBoard, depth+1);
+				SearchTuple result = maxVal(newBoard, alpha, beta, depth+1);
 				
 				//if max gave back something worse than what min has...
 				if(result.getScore() < worst.getScore()) {
-					
-					//store it and its action
 					worst.setScore(result.getScore());
 					worst.setAction(i);
+					
+					//update beta if necessary
+					beta = Integer.min(beta, worst.getScore());
+				}
+				
+				//if best score exceeds alpha, then return worst score
+				if(worst.getScore() <= alpha) {
+					return worst;
 				}
 			}
 			

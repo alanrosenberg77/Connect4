@@ -49,6 +49,7 @@ public class ConnectFourApp extends Application {
 
 	// important ui elements
 	private Button btnQuit;
+	private Button btnPlayAgain;
 
 	// a pool of threads we can use when allowing the agent to compute so
 	// we do not block the UI thread.
@@ -152,7 +153,22 @@ public class ConnectFourApp extends Application {
 			executorService.shutdownNow(); // kill pending thread to exit immediately
 			Platform.exit();
 		});
+		
+		btnPlayAgain = new Button("Play Again");
+		btnPlayAgain.setFont(Font.font(INSTRUCTION_FONT_SIZE));
+		btnPlayAgain.setOnAction((ActionEvent ev) -> {
+			gc.initGame();
+			updateView();
+			
+			for(Button b : userButtons) {
+				b.setDisable(false);
+			}
+			
+			instruction.setText("Your turn");
+			
+		});
 		bottomPane.getChildren().add(btnQuit);
+		bottomPane.getChildren().add(btnPlayAgain);
 
 		/*
 		 * Ready to layout the main human interface

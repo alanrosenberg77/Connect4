@@ -1,5 +1,7 @@
 package cs440.c4;
 
+import java.util.Arrays;
+
 /**
  * Instances of the ConnectBoard class are implementations of the GameBoard
  * interface. They can addDisks to a column of the game board, determine whether
@@ -20,29 +22,27 @@ public class ConnectBoard implements GameBoard {
 	 * Convenient constructor for parameterized ConnectBoard
 	 */
 	public ConnectBoard(int row, int col) {
-		board = new int[col][row];
+		board = new int[row][col];
 	}
 	
 	/*
 	 * Convenient constructor for default ConnectBoard
 	 */
 	public ConnectBoard() {
-		board = new int[7][6];
+		board = new int[6][7];
 	}
 
 	@Override
 	public int addDisk(int c, int player) {
 		
-		int[] col = board[c];	//retrieving specified column
-		
 		//looping through column...
-		for(int i = 0 ; i < col.length ; i++) {
+		for(int i = board.length-1 ; i >= 0 ; i--) {
 			
 			//until we find an available space
-			if(col[i] == AVAIL) {
+			if(board[i][c] == AVAIL) {
 				
 				//putting a disk there based on whose turn it is
-				col[i] = player;
+				board[i][c] = player;
 				
 				//returning index of column where disk was dropped
 				return i;
@@ -95,7 +95,7 @@ public class ConnectBoard implements GameBoard {
 	private int checkN(int row, int col) {
 		
 		//grabbing which player to check for
-		int player = board[col][row];
+		int player = board[row][col];
 		
 		//tracking how many connected disks there are
 		int streak = 0;
@@ -106,7 +106,7 @@ public class ConnectBoard implements GameBoard {
 			for(int i = 0 ; i < N ; i++) {
 				
 				//checking space for matching disk
-				if(board[col][row+i] == player) {
+				if(board[row+i][col] == player) {
 					
 					//incrementing streak
 					streak++;
@@ -142,7 +142,7 @@ public class ConnectBoard implements GameBoard {
 	private int checkE(int row, int col) {
 		
 		//grabbing which player to check for
-		int player = board[col][row];
+		int player = board[row][col];
 		
 		//tracking how many connected disks there are
 		int streak = 0;
@@ -153,7 +153,7 @@ public class ConnectBoard implements GameBoard {
 			for(int i = 0 ; i < N ; i++) {
 				
 				//checking space for matching disk
-				if(board[col+i][row] == player) {
+				if(board[row][col+i] == player) {
 					
 					//incrementing streak
 					streak++;
@@ -189,7 +189,7 @@ public class ConnectBoard implements GameBoard {
 	private int checkNE(int row, int col) {
 		
 		//grabbing which player to check for
-		int player = board[col][row];
+		int player = board[row][col];
 		
 		//tracking how many connected disks there are
 		int streak = 0;
@@ -200,7 +200,7 @@ public class ConnectBoard implements GameBoard {
 			for(int i = 0 ; i < N ; i++) {
 				
 				//checking space for matching disk
-				if(board[col+i][row+i] == player) {
+				if(board[row+i][col+i] == player) {
 					
 					//incrementing streak
 					streak++;
@@ -238,7 +238,7 @@ public class ConnectBoard implements GameBoard {
 	private int checkNW(int row, int col) {
 		
 		//grabbing which player to check for
-		int player = board[col][row];
+		int player = board[row][col];
 		
 		//tracking how many connected disks there are
 		int streak = 0;
@@ -249,7 +249,7 @@ public class ConnectBoard implements GameBoard {
 			for(int i = 0 ; i < N ; i++) {
 				
 				//checking space for matching disk
-				if(board[col-i][row+i] == player) {
+				if(board[row+i][col-i] == player) {
 					
 					//incrementing streak
 					streak++;
@@ -278,6 +278,7 @@ public class ConnectBoard implements GameBoard {
 		
 	}
 
+	// TODO tie case
 	@Override
 	public boolean gameOver() {
 		
@@ -286,6 +287,12 @@ public class ConnectBoard implements GameBoard {
 		
 		//as long as connected returns 1 or -1 (not 0)...
 		if(player != 0)
+			
+			//game over
+			return true;
+		
+		//and if board is full...
+		else if(isBoardFull())
 			
 			//game over
 			return true;
@@ -300,22 +307,66 @@ public class ConnectBoard implements GameBoard {
 	@Override
 	public boolean isColumnFull(int c) {
 		
-		int[] col = board[c];	//retrieving the column
-		
-		boolean isFull = true;
-		
 		//looping through column...
-		for(int i : col) {
+		for(int i = 0 ; i < board.length ; i++) {
 			
 			//if we find an open space...
-			if(i == 0) {
+			if(board[i][c] == 0) {
 				
 				//then its not full
-				isFull = false;
+				return false;
 			}
 		}
 		
-		return isFull;
+		return true;
+	}
+	
+	public boolean isBoardFull() {
+		
+		for(int i = 0 ; i < board[0].length ; i++) {
+			if(!isColumnFull(i)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Helper method that determines the amount of points to assign to this
+	 * node based on the state of the game. 10 if player wins, -10 if agent wins,
+	 * 0 if no winner. Updates <i>points</i> attribute
+	 * 
+	 * @return calculated point value
+	 */
+	public int calcPoints() {
+		
+		int winner = connected();
+		
+		if(winner != 0)
+			return winner * 10;
+		
+		else
+			return 0;
+	}
+	
+	public ConnectBoard copy() {
+		
+		int rows = board.length;
+		int cols = board[0].length;
+		
+		int[][] newBoard = new int[rows][cols];
+		
+		for(int i = 0 ; i < newBoard.length ; i++) {
+			for(int j = 0 ; j < newBoard[0].length ; j++) {
+				newBoard[i][j] = board[i][j];
+			}
+		}
+		
+		ConnectBoard newCb = new ConnectBoard();
+		newCb.setBoard(newBoard);
+		
+		return newCb;
 	}
 	
 	/*

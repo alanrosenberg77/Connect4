@@ -35,7 +35,7 @@ public class GameController {
 		
 		this.gb = new ConnectBoard(maxRows, maxCols);
 		
-    	ai = new RandomAgent(gb);
+    	ai = new AlphaBetaAgent(gb);
 	}
 	
 	
@@ -93,19 +93,20 @@ public class GameController {
 
 		try {
 			
+			ai.initializeWithBoard(gb);
+			
 	        int c = ai.nextAction();
 	        int r = gb.addDisk(c, GameBoard.AGENT);
 	        
 		} catch (Exception e) {
-			System.err.println("uh,oh. we have a problem. ");
+			e.printStackTrace();
 		}
 
 	}
 
 
 	public void initGame() {
-		// TODO Auto-generated method stub
-		
+		this.gb = new ConnectBoard(rows, cols);
 	}
 	
 	
