@@ -15,6 +15,12 @@
             <artifactId>javafx-controls</artifactId>
             <version>20</version>
         </dependency>
+<dependency>
+    <groupId>org.junit</groupId>
+    <artifactId>junit5-engine</artifactId>
+    <version>5.0.0-ALPHA</version>
+</dependency>
+
     </dependencies>
     <build>
         <plugins>
