@@ -26,7 +26,6 @@ public class MinimaxAgent implements Agent {
 	@Override
 	public int nextAction() throws Exception {
 		
-		System.err.println("deciding");
 		return minimaxSearch();
 	}
 
@@ -37,10 +36,17 @@ public class MinimaxAgent implements Agent {
 	 */
 	private int minimaxSearch() {
 		
-		System.err.println("minimaxing");
+//		System.out.println("\nStarting Minimax Search...");
+		
+		System.gc();
+		long before = System.nanoTime();
 
 		//calling min to find minimum option and returning it
 		SearchTuple solution = minVal(board.copy(), 0);
+		
+		long after = System.nanoTime();
+		System.out.println(after-before);
+		
 		return solution.getAction();
 
 	}
@@ -52,8 +58,6 @@ public class MinimaxAgent implements Agent {
 	 * @return maximum utility of child states
 	 */
 	private SearchTuple maxVal(ConnectBoard current, int depth) {
-		
-		System.err.println("maxing");
 		
 		//exiting early if in terminal state, returning only utility
 		if(current.gameOver() || depth >= 7)
@@ -97,8 +101,6 @@ public class MinimaxAgent implements Agent {
 	 * @return minimum utility of child states
 	 */
 	private SearchTuple minVal(ConnectBoard current, int depth) {
-		
-		System.err.println("mining");
 
 		//exitinig early if in terminal state, returning only utility
 		if(current.gameOver() || depth >= 7)

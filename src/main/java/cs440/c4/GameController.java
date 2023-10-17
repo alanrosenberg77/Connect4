@@ -35,7 +35,7 @@ public class GameController {
 		
 		this.gb = new ConnectBoard(maxRows, maxCols);
 		
-    	ai = new AlphaBetaAgent(gb);
+    	ai = new MinimaxAgent(gb);
 	}
 	
 	
