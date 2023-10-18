@@ -10,6 +10,7 @@ package cs440.c4;
 public class AlphaBetaAgent implements Agent {
 	
 	ConnectBoard board;
+	int count;
 	
 	/*
 	 * Convenient parameterized constructor
@@ -27,7 +28,6 @@ public class AlphaBetaAgent implements Agent {
 	@Override
 	public int nextAction() throws Exception {
 		
-		System.err.println("deciding");
 		return alphaBetaSearch();
 	}
 	
@@ -38,10 +38,15 @@ public class AlphaBetaAgent implements Agent {
 	 */
 	private int alphaBetaSearch() {
 		
-		System.err.println("alhpaing and betaing");
+		System.gc();
+		long before = System.nanoTime();
 		
 		//calling min to find minimum option and returning it
 		SearchTuple solution = minVal(board.copy(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0);
+		
+		long after = System.nanoTime();
+		System.out.println(after-before);
+		
 		return solution.getAction();
 	}
 	
@@ -57,7 +62,8 @@ public class AlphaBetaAgent implements Agent {
 	 */
 	private SearchTuple maxVal(ConnectBoard current, int alpha, int beta, int depth) {
 		
-		System.err.println("maxing");
+		count++;
+//		System.err.println(count);
 		
 		//exiting early if in terminal state or too deep, returning only utility
 		if(current.gameOver() || depth >= 7)
@@ -111,9 +117,10 @@ public class AlphaBetaAgent implements Agent {
 	 * @return minimum utility of child states
 	 */
 	private SearchTuple minVal(ConnectBoard current, int alpha, int beta, int depth) {
-		
-		System.err.println("mining");
 
+		count++;
+//		System.err.println(count);
+		
 		//exiting early if in terminal state or too deep, returning only utility
 		if(current.gameOver() || depth >= 7)
 			return new SearchTuple(current.calcPoints(), null);

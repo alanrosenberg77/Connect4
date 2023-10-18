@@ -9,6 +9,8 @@ package cs440.c4;
 public class MinimaxAgent implements Agent {
 
 	ConnectBoard board;
+	
+	int count;
 
 	/*
 	 * Convenient parameterized constructor
@@ -59,6 +61,9 @@ public class MinimaxAgent implements Agent {
 	 */
 	private SearchTuple maxVal(ConnectBoard current, int depth) {
 		
+		count++;
+		System.err.println(count);
+		
 		//exiting early if in terminal state, returning only utility
 		if(current.gameOver() || depth >= 7)
 			return new SearchTuple(current.calcPoints(), null);
@@ -101,6 +106,9 @@ public class MinimaxAgent implements Agent {
 	 * @return minimum utility of child states
 	 */
 	private SearchTuple minVal(ConnectBoard current, int depth) {
+		
+		count++;
+		System.err.println(count);
 
 		//exitinig early if in terminal state, returning only utility
 		if(current.gameOver() || depth >= 7)
